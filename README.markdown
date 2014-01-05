@@ -21,3 +21,11 @@ Build
  * ```make```
  * ```./mineclimber```
 
+For i3-wm users
+===============
+
+ * Useful to add ```~/.i3/config```:
+
+```
+for_window [title="MineClimber"] floating enable
+```
