@@ -41,6 +41,12 @@ namespace mine
                std::set<WindowFlag> flags);
 
         ~Window();
+
+      protected:
+        friend class Renderer;
+        SDL_Window * getHandle() const
+        { return m_win; }
+
       private:
         friend std::ostream& operator<<(std::ostream&, const Window &);
 
