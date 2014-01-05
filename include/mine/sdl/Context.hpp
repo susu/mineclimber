@@ -11,12 +11,6 @@ namespace mine
 {
   namespace sdl
   {
-    class SDLException : public MineException
-    {
-      public:
-        using MineException::MineException;
-    };
-
     enum class SDLInitFlag : uint32_t
     {
       InitEverything = SDL_INIT_EVERYTHING,
@@ -26,7 +20,7 @@ namespace mine
     {
       switch (flag)
       {
-        case SDLInitFlag::InitEverything: return out << "INIT_EVERYTHING";
+        case SDLInitFlag::InitEverything: return out << "InitEverything";
       }
       return out;
     }

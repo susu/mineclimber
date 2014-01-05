@@ -2,6 +2,9 @@
 #define MINE_GOODIES_HPP_INC
 
 #include <type_traits>
+#include <string>
+#include <set>
+#include <sstream>
 
 template<typename T>
 auto to_underlying_cast(T value) -> typename std::underlying_type<T>::type
@@ -15,20 +18,28 @@ T from_underlying_cast(typename std::underlying_type<T>::type value)
   return static_cast<T>(value);
 }
 
-/**
- * non-copyable BUT moveable
- */
-struct NonCopyable
+template<typename T>
+std::string flagsetToString(const std::set<T> & flagset)
 {
-  NonCopyable() = default;
-  ~NonCopyable() = default;
+  static_assert(std::is_enum<T>::value == true, "T must be enum!");
+  std::ostringstream os;
+  os << "{";
+  for (auto flag : flagset)
+  {
+    os << flag << ", ";
+  }
+  os << "}";
+  return std::move(os.str());
+}
 
-  NonCopyable(const NonCopyable&) = delete;
-  NonCopyable& operator=(const NonCopyable&) = delete;
-
-  NonCopyable(NonCopyable&&) = default;
-  NonCopyable& operator=(NonCopyable&&) = default;
-};
+template<typename T>
+auto flagsetToValue(const std::set<T> & flagset) -> typename std::underlying_type<T>::type
+{
+  typename std::underlying_type<T>::type ret = 0;
+  for (auto flag : flagset)
+    ret |= to_underlying_cast(flag);
+  return ret;
+}
 
 /**
  *  non-copyable AND non-moveable either
@@ -43,6 +54,37 @@ struct NonTransferable
 
   NonTransferable(NonTransferable&&) = delete;
   NonTransferable& operator=(NonTransferable&&) = delete;
+};
+
+inline std::string ToUpper(std::string str)
+{
+  for (char & c : str)
+  {
+    c = toupper(c);
+  }
+  return str;
+}
+
+class MakeString
+{
+  public:
+    MakeString()
+    {}
+
+    template<typename T>
+    MakeString& operator<<(const T& value)
+    {
+      m_out << value;
+      return *this;
+    }
+
+    operator std::string() const
+    {
+      return m_out.str();
+    }
+  private:
+    std::ostringstream m_out;
+
 };
 
 #endif

@@ -46,11 +46,11 @@ namespace mine
 
         std::string m_title;
         PixelPos m_position; ///< position
-        PixelPos m_size;
+        PixelPos m_size;     ///< window size
 
         SDL_Window * m_win;
     };
-//    std::ostream& operator<<(std::ostream&, const Window &);
+
     inline std::ostream& operator<<(std::ostream& out, const Window & win)
     {
       return out << "title: " << win.m_title <<
