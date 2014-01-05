@@ -1,0 +1,23 @@
+MineClimber
+===========
+
+ * basic platform game only for learning purposes (SDL2, 2D graphics)
+
+Dependencies
+============
+
+ * CMake
+ * clang 3.3 or above (or GCC 4.8 or above)
+
+License
+=======
+ * See LICENSE (GPLv3)
+
+Build
+=====
+
+ * ```mkdir build && cd build```
+ * ```cmake ..```
+ * ```make```
+ * ```./mineclimber```
+

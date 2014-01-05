@@ -1,0 +1,6 @@
+build/
+*.pyc
+*.o
+*.d
+*.gcno
+*.gcda
