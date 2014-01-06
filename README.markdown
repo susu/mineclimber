@@ -8,6 +8,7 @@ Dependencies
 
  * CMake
  * clang 3.3 or above (or GCC 4.8 or above)
+ * SDL2, SDL2_image
 
 License
 =======
