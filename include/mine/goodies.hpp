@@ -5,6 +5,7 @@
 #include <string>
 #include <set>
 #include <sstream>
+#include <memory>
 
 template<typename T>
 auto to_underlying_cast(T value) -> typename std::underlying_type<T>::type
@@ -86,5 +87,16 @@ class MakeString
     std::ostringstream m_out;
 
 };
+
+namespace std
+{
+  template<typename T, typename... Args>
+  std::unique_ptr<T> make_unique(Args&&... args)
+  {
+    static_assert(std::is_array<T>::value == false,
+                  "This version of make_unique cannot be applied to arrays");
+    return std::unique_ptr<T>(new T(std::forward<Args&&>(args)...));
+  }
+}
 
 #endif
