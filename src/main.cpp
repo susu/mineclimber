@@ -9,10 +9,37 @@
 #include <mine/sdl/ImageContext.hpp>
 #include <mine/sdl/Surface.hpp>
 #include <mine/sdl/Texture.hpp>
+#include <mine/sdl/EventWaitress.hpp>
+#include <mine/sdl/EventVisitor.hpp>
 
 using namespace mine;
 
 const std::string ASSET_DIR = "../assets";
+
+class MyVisitor : public sdl::EventVisitor
+{
+  public:
+    bool shouldQuit() const
+    { return m_quit; }
+
+    void visit(const sdl::KeyEvent & ) override
+    {
+      LOG_DEBUG("KeyEvent arrived.");
+    }
+
+    void visit(const sdl::MouseEvent & ) override
+    {
+      LOG_DEBUG("MouseEvent arrived.");
+    }
+
+    void visit(const sdl::QuitEvent &) override
+    {
+      LOG_DEBUG("QuitEvent arrived.");
+      m_quit = true;
+    }
+  private:
+    bool m_quit = false;
+};
 
 int main()
 {
@@ -37,16 +64,23 @@ int main()
     // Create a background image from a PNG
     sdl::Texture background = sdl::Texture::CreateFromSurface(renderer,
         sdl::Surface::CreateFromPNG(ASSET_DIR + "/sky.png"));
-    std::cout << &background;
 
     renderer.clear(); // clear the screen
     renderer.copy(background); // copy our background to renderer
     renderer.present(); // show the result to the user
 
+    sdl::EventWaitress waitress;
+
+    auto visitor = std::make_unique<MyVisitor>();
+    MyVisitor & vis = *visitor;
+    waitress.addVisitor(std::move(visitor));
+
+    while (!vis.shouldQuit())
+    {
+      waitress.waitFor(10);
+    }
+
     LOG_DEBUG("========================================================================");
-    LOG_DEBUG("3"); SDL_Delay(1000);
-    LOG_DEBUG("2"); SDL_Delay(1000);
-    LOG_DEBUG("1"); SDL_Delay(1000);
   }
   catch (const MineException & ex)
   {
