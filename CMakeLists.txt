@@ -12,7 +12,13 @@ add_executable(mineclimber ${SOURCE_FILES})
 
 include_directories(include)
 
-add_definitions(-std=c++11 -Wall -Werror -DMINE_DEBUG -g)
+add_definitions(-std=c++11
+                -Wall
+                -Werror
+                -DMINE_DEBUG
+                -g
+                )
 
+find_library(SDL2 SDL2_image)
 target_link_libraries(mineclimber SDL2 SDL2_image)
 
