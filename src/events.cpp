@@ -2,10 +2,6 @@
 
 using namespace mine::sdl;
 
-KeyEvent::KeyEvent(SDL_KeyboardEvent )
-{
-}
-
 MouseEvent::MouseEvent(SDL_MouseMotionEvent )
 {
 }
