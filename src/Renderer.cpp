@@ -50,10 +50,32 @@ void Renderer::clear()
   SDL_RenderClear(m_renderer);
 }
 
-void Renderer::copy(const Texture & texture)
+void Renderer::copyAll(const Texture & texture)
 {
   ENFORCE(m_renderer != nullptr, "Renderer object is invalid!");
   SDL_RenderCopy(m_renderer, texture.getHandle(), NULL, NULL);
+}
+
+void Renderer::copyTo(const Texture & texture, const Rect & dest)
+{
+  ENFORCE(m_renderer != nullptr, "Renderer object is invalid!");
+  SDL_Rect sdlDest;
+  sdlDest.x = dest.m_pos.x;
+  sdlDest.y = dest.m_pos.y;
+  sdlDest.w = dest.m_dimension.x;
+  sdlDest.h = dest.m_dimension.y;
+  SDL_RenderCopy(m_renderer, texture.getHandle(), NULL, &sdlDest);
+}
+
+void Renderer::copyFrom(const Texture & texture, const Rect & src)
+{
+  ENFORCE(m_renderer != nullptr, "Renderer object is invalid!");
+  SDL_Rect sdlSource;
+  sdlSource.x = src.m_pos.x;
+  sdlSource.y = src.m_pos.y;
+  sdlSource.w = src.m_dimension.x;
+  sdlSource.h = src.m_dimension.y;
+  SDL_RenderCopy(m_renderer, texture.getHandle(), &sdlSource, NULL);
 }
 
 void Renderer::present()

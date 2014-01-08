@@ -11,6 +11,7 @@
 #include <mine/sdl/Texture.hpp>
 #include <mine/sdl/EventWaitress.hpp>
 #include <mine/sdl/EventVisitor.hpp>
+#include <mine/sdl/events.hpp>
 
 using namespace mine;
 
@@ -22,9 +23,9 @@ class MyVisitor : public sdl::EventVisitor
     bool shouldQuit() const
     { return m_quit; }
 
-    void visit(const sdl::KeyEvent & ) override
+    void visit(const sdl::KeyEvent & ev) override
     {
-      LOG_DEBUG("KeyEvent arrived.");
+      LOG_DEBUG("KeyEvent arrived: ", ev);
     }
 
     void visit(const sdl::MouseEvent & ) override
@@ -64,9 +65,15 @@ int main()
     // Create a background image from a PNG
     sdl::Texture background = sdl::Texture::CreateFromSurface(renderer,
         sdl::Surface::CreateFromPNG(ASSET_DIR + "/sky.png"));
+    sdl::Texture block = sdl::Texture::CreateFromSurface(renderer,
+        sdl::Surface::CreateFromPNG(ASSET_DIR + "/soil.png"));
 
     renderer.clear(); // clear the screen
-    renderer.copy(background); // copy our background to renderer
+    renderer.copyAll(background); // copy our background to renderer
+    for (int i = 0; i < 10; ++i)
+    {
+      renderer.copyTo(block, Rect{ {10 + 41*i,100}, {40,40} });
+    }
     renderer.present(); // show the result to the user
 
     sdl::EventWaitress waitress;
@@ -77,14 +84,15 @@ int main()
 
     while (!vis.shouldQuit())
     {
-      waitress.waitFor(10);
+      waitress.waitFor(10); // wait with 10ms timeout
     }
 
     LOG_DEBUG("========================================================================");
   }
   catch (const MineException & ex)
   {
-    std::cout << "!!! --- !!! ERROR: " << ex.what() << std::endl;
+    std::cout << "!!! ---\n!!! ERROR: " << ex.what() << std::endl;
+    std::cout << "!!! ---" << std::endl;
   }
   LOG_DEBUG("Bye.");
 }
