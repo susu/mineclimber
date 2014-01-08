@@ -7,13 +7,13 @@ namespace mine
 {
   struct PixelPos
   {
-    int m_width;
-    int m_height;
+    int x;
+    int y;
   };
 
   inline std::ostream& operator<<(std::ostream & out, const PixelPos & pos)
   {
-    return out << "(" << pos.m_width << ", " << pos.m_height << ")";
+    return out << "(" << pos.x << ", " << pos.y << ")";
   }
 }
 

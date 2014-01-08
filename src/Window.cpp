@@ -22,8 +22,8 @@ Window::Window(const std::string & title,
 
   LOG_DEBUG("Creating window: ", *this);
   m_win = SDL_CreateWindow(title.c_str(),
-                           startPos.m_width, startPos.m_height,
-                           size.m_width, size.m_height, sumFlag);
+                           startPos.x, startPos.y,
+                           size.x, size.y, sumFlag);
 }
 
 Window::~Window()
