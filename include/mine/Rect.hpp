@@ -1,14 +1,14 @@
 #ifndef MINE_RECT_HPP_INC
 #define MINE_RECT_HPP_INC
 
-#include <mine/PixelPos.hpp>
+#include <mine/Pos.hpp>
 
 namespace mine
 {
   struct Rect
   {
-    PixelPos m_pos;       ///< upper left corner
-    PixelPos m_dimension; ///< size
+    Pos m_pos;       ///< upper left corner
+    Pos m_dimension; ///< size
   };
 }
 

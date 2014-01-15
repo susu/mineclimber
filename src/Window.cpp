@@ -6,8 +6,8 @@
 using namespace mine::sdl;
 
 Window::Window(const std::string & title,
-               PixelPos startPos,
-               PixelPos size,
+               Pos startPos,
+               Pos size,
                std::set<WindowFlag> flags)
   : m_title(title)
   , m_position(startPos)

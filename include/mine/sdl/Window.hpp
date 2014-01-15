@@ -6,7 +6,7 @@
 #include <ostream>
 
 #include <mine/goodies.hpp>
-#include <mine/PixelPos.hpp>
+#include <mine/Pos.hpp>
 
 namespace mine
 {
@@ -36,8 +36,8 @@ namespace mine
     {
       public:
         Window(const std::string & title,
-               PixelPos startPos,
-               PixelPos size,
+               Pos startPos,
+               Pos size,
                std::set<WindowFlag> flags);
 
         ~Window();
@@ -51,8 +51,8 @@ namespace mine
         friend std::ostream& operator<<(std::ostream&, const Window &);
 
         std::string m_title;
-        PixelPos m_position; ///< position
-        PixelPos m_size;     ///< window size
+        Pos m_position; ///< position
+        Pos m_size;     ///< window size
 
         SDL_Window * m_win;
     };

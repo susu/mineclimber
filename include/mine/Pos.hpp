@@ -5,13 +5,13 @@
 
 namespace mine
 {
-  struct PixelPos
+  struct Pos
   {
     int x;
     int y;
   };
 
-  inline std::ostream& operator<<(std::ostream & out, const PixelPos & pos)
+  inline std::ostream& operator<<(std::ostream & out, const Pos & pos)
   {
     return out << "(" << pos.x << ", " << pos.y << ")";
   }
