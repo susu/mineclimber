@@ -2,7 +2,12 @@
 #include <iostream>
 
 #include <mine/Logger.hpp>
-#include <mine/PixelPos.hpp>
+#include <mine/Pos.hpp>
+#include <mine/BlockContainer.hpp>
+#include <mine/ClipRenderer.hpp>
+#include <mine/Painter.hpp>
+#include <mine/BlockType.hpp>
+
 #include <mine/sdl/Context.hpp>
 #include <mine/sdl/Window.hpp>
 #include <mine/sdl/Renderer.hpp>
@@ -53,8 +58,8 @@ int main()
     // Initializing SDL_image only for PNG (separated library)
     sdl::ImageContext imgContext({sdl::IMGInitFlag::PNG});
 
-    PixelPos winStartPos = {100, 100};
-    PixelPos winSize{640, 480};
+    Pos winStartPos = {100, 100};
+    Pos winSize{640, 480};
     sdl::Window window("MineClimber",
                        winStartPos,
                        winSize,
@@ -65,15 +70,29 @@ int main()
     // Create a background image from a PNG
     sdl::Texture background = sdl::Texture::CreateFromSurface(renderer,
         sdl::Surface::CreateFromPNG(ASSET_DIR + "/sky.png"));
+
+    BlockContainer container;
+
     sdl::Texture block = sdl::Texture::CreateFromSurface(renderer,
         sdl::Surface::CreateFromPNG(ASSET_DIR + "/soil.png"));
 
+    Rect startClip = {
+      { -8,  6},   // upper-left corner
+      { 16, 12} }; // width, height
+
+    ClipRenderer clip(startClip, renderer);
+
+    BlockContainer blocks;
+    Painter painter(blocks, clip);
+
+    LOG_DEBUG("Painter and BlockContainer are initialized.");
+
+    blocks.createBlock(BlockType::Soil, 0, 0);
+
+    // TODO painter as BlockVisistor...
+
     renderer.clear(); // clear the screen
     renderer.copyAll(background); // copy our background to renderer
-    for (int i = 0; i < 10; ++i)
-    {
-      renderer.copyTo(block, Rect{ {10 + 41*i,100}, {40,40} });
-    }
     renderer.present(); // show the result to the user
 
     sdl::EventWaitress waitress;
