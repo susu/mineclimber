@@ -17,6 +17,8 @@ namespace mine
        */
       virtual void tick(int difftime) = 0;
 
+      virtual void print(std::ostream & out) const = 0;
+
       virtual void accept(BlockVisitor & visitor) const = 0;
 
       const Pos & getPos() const
@@ -34,6 +36,12 @@ namespace mine
     private:
       Pos m_pos;
   };
+
+  inline std::ostream& operator<<(std::ostream & out, const Block & block)
+  {
+    block.print(out);
+    return out;
+  }
 
   template<typename T>
   class BlockBase : public Block

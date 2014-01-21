@@ -12,6 +12,8 @@ namespace mine
 
       void tick(int difftime) override;
 
+      void print(std::ostream & out) const override;
+
     private:
   };
 }
