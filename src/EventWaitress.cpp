@@ -5,6 +5,7 @@
 #include <mine/Logger.hpp>
 #include <mine/sdl/EventVisitor.hpp>
 #include <mine/sdl/events.hpp>
+#include <mine/sdl/WindowEvent.hpp>
 
 using namespace mine::sdl;
 
@@ -55,6 +56,9 @@ std::unique_ptr<EventBase> EventWaitress::CreateEvent(const SDL_Event & ev)
     case SDL_MOUSEBUTTONUP:
     case SDL_MOUSEWHEEL:
       return std::make_unique<MouseEvent>(ev.motion);
+
+    case SDL_WINDOWEVENT:
+      return std::make_unique<WindowEvent>(ev.window);
   }
   return nullptr;
 }
