@@ -31,6 +31,7 @@ Renderer::Renderer(const Window & window, std::set<RendererFlag> renderFlags)
   m_renderer = SDL_CreateRenderer(window.getHandle(),
                                   -1 /* auto-select device */,
                                   flagValue);
+  m_winSize = window.getSize();
   if (m_renderer == nullptr)
   {
     MINE_RAISE(SDLException, "Cannot initialize renderer: " << SDL_GetError());

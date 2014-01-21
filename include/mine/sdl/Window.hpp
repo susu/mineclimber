@@ -42,6 +42,9 @@ namespace mine
 
         ~Window();
 
+        Pos getSize() const
+        { return m_size; }
+
       protected:
         friend class Renderer;
         SDL_Window * getHandle() const

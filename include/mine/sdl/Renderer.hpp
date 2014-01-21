@@ -28,6 +28,9 @@ namespace mine
         Renderer(const Window & win, std::set<RendererFlag> renderFlags);
         ~Renderer();
 
+        Pos getWindowSize() const
+        { return m_winSize; }
+
         SDL_Renderer * getHandle() const
         { return m_renderer; }
 
@@ -58,6 +61,7 @@ namespace mine
 
       private:
         SDL_Renderer * m_renderer;
+        Pos m_winSize;
     };
   }
 }
