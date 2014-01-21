@@ -25,12 +25,31 @@ const std::string ASSET_DIR = "../assets";
 class MyVisitor : public sdl::EventVisitor
 {
   public:
+    MyVisitor(ClipRenderer & renderer)
+      : m_renderer(renderer)
+    {}
+
     bool shouldQuit() const
     { return m_quit; }
 
     void visit(const sdl::KeyEvent & ev) override
     {
       LOG_DEBUG("KeyEvent arrived: ", ev);
+      switch (ev.GetKeycode())
+      {
+        case SDLK_UP:
+          m_renderer.verticalMove(1.0);
+          break;
+        case SDLK_DOWN:
+          m_renderer.verticalMove(-1.0);
+          break;
+        case SDLK_LEFT:
+          m_renderer.horizontalMove(-1.0);
+          break;
+        case SDLK_RIGHT:
+          m_renderer.horizontalMove(1.0);
+          break;
+      }
     }
 
     void visit(const sdl::MouseEvent & ) override
@@ -43,8 +62,14 @@ class MyVisitor : public sdl::EventVisitor
       LOG_DEBUG("QuitEvent arrived.");
       m_quit = true;
     }
+
+    void visit(const sdl::WindowEvent &) override
+    {
+      LOG_DEBUG("WindowEvent arrived.");
+    }
   private:
     bool m_quit = false;
+    ClipRenderer & m_renderer;
 };
 
 int main()
@@ -76,34 +101,41 @@ int main()
     sdl::Texture block = sdl::Texture::CreateFromSurface(renderer,
         sdl::Surface::CreateFromPNG(ASSET_DIR + "/soil.png"));
 
-    Rect startClip = {
-      { -8,  6},   // upper-left corner
-      { 16, 12} }; // width, height
+    FRect startClip = {
+      { -8.5,  -6}, // lower-left corner
+      { 16, 12} };  // width, height
 
     ClipRenderer clip(startClip, renderer);
 
     BlockContainer blocks;
-    Painter painter(blocks, clip);
+    // Painter painter(blocks, clip, std::move(block));
 
     LOG_DEBUG("Painter and BlockContainer are initialized.");
 
     blocks.createBlock(BlockType::Soil, 0, 0);
 
-    // TODO painter as BlockVisistor...
-
     renderer.clear(); // clear the screen
     renderer.copyAll(background); // copy our background to renderer
+    // painter.drawBlocks();
+    clip.copy(block, FRect{{0,0}, {1,1}} );
+
     renderer.present(); // show the result to the user
 
     sdl::EventWaitress waitress;
 
-    auto visitor = std::make_unique<MyVisitor>();
+    auto visitor = std::make_unique<MyVisitor>(clip);
     MyVisitor & vis = *visitor;
     waitress.addVisitor(std::move(visitor));
 
     while (!vis.shouldQuit())
     {
       waitress.waitFor(10); // wait with 10ms timeout
+
+      // Re-draw
+      renderer.clear(); // clear the screen
+      renderer.copyAll(background); // copy our background to renderer
+      clip.copy(block, FRect{{0,0}, {1,1}} );
+      renderer.present();
     }
 
     LOG_DEBUG("========================================================================");
