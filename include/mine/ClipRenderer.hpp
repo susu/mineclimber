@@ -1,6 +1,7 @@
 #ifndef MINE_CLIPRENDERER_HPP_INC
 #define MINE_CLIPRENDERER_HPP_INC
 
+#include <glm/glm.hpp>
 #include <mine/goodies.hpp>
 #include <mine/Rect.hpp>
 
@@ -9,13 +10,14 @@ namespace mine
   namespace sdl
   {
     class Renderer;
+    class Texture;
   }
   class ClipRenderer : public NonTransferable
   {
     public:
-      ClipRenderer(Rect startClip, sdl::Renderer & renderer);
+      ClipRenderer(FRect startClip, sdl::Renderer & renderer);
 
-      const Rect & getCurrentClip() const
+      const FRect & getCurrentClip() const
       { return m_clip; }
 
       /**
@@ -27,12 +29,15 @@ namespace mine
 
       /**
        * Moves the current clip on Y-axis with yDelta.
-       * yDelta > 0: moves DOWN
-       * yDelat < 0: moves UP
+       * yDelta < 0: moves DOWN
+       * yDelta > 0: moves UP
        */
       void verticalMove(double yDelta);
+
+      void copy(const sdl::Texture & texture, const FRect & to);
     private:
-      Rect m_clip;
+      glm::mat3 m_viewMatrix;
+      FRect m_clip;
       sdl::Renderer & m_renderer;
   };
 }
