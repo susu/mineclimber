@@ -17,8 +17,11 @@ namespace mine
       bool isInMemory() const;
       void load();
 
+      std::unique_ptr<Block> & getRef(Pos p)
+      { return getRef(p.x, p.y); }
+
       std::unique_ptr<Block> & getRef(int i, int j)
-      { return m_blocks[ j * CHUNK_SIZE + i ]; }
+      { return m_blocks.at( j * CHUNK_SIZE + i ); }
     private:
       /**
        *  (i,j) coord. is chunk-dependent.
