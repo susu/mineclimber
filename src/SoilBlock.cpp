@@ -11,5 +11,5 @@ void SoilBlock::tick(int difftime)
 
 void SoilBlock::print(std::ostream & out) const
 {
-  out << "SoilBlock";
+  out << "SoilBlock " << getPos();
 }
