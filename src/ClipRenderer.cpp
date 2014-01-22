@@ -63,12 +63,11 @@ void ClipRenderer::copy(const sdl::Texture & texture, const FRect & to)
   pos = deviceMatrix * normPos;
   dim = deviceMatrix * normDim;
 
-  ENFORCE(pos.x > 0, "invalid pos");
-  ENFORCE(pos.y > 0, "invalid pos");
-
   Rect transformed;
-  transformed.m_pos = pos;
-  transformed.m_dimension = dim;
+  transformed.m_pos.x = round(pos.x);
+  transformed.m_pos.y = round(pos.y);
+  transformed.m_dimension.x = round(dim.x);
+  transformed.m_dimension.y = round(dim.y);
 
   // Y-axis direction is inverse
   transformed.m_pos.y = winSize.y - transformed.m_pos.y;
