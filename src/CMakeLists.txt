@@ -8,6 +8,7 @@ set(SOURCE_FILES
   ClipRenderer.cpp
   CMakeLists.txt
   Context.cpp
+  EventListener.cpp
   events.cpp
   EventWaitress.cpp
   ImageContext.cpp

@@ -15,6 +15,11 @@ namespace mine
       : m_pos(p)
       , m_dimension(d)
     {}
+
+    Rect(int x, int y, int dx, int dy)
+      : m_pos(x,y)
+      , m_dimension(dx, dy)
+    {}
   };
 
   inline std::ostream& operator<<(std::ostream & out, const Rect & r)
@@ -31,6 +36,11 @@ namespace mine
     FRect(FPos p, FPos d)
       : m_pos(p)
       , m_dimension(d)
+    {}
+
+    FRect(double x, double y, double dx, double dy)
+      : m_pos(x, y)
+      , m_dimension(dx, dy)
     {}
   };
 

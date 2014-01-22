@@ -7,6 +7,7 @@
 #include <mine/ClipRenderer.hpp>
 #include <mine/Painter.hpp>
 #include <mine/BlockType.hpp>
+#include <mine/EventListener.hpp>
 
 #include <mine/sdl/Context.hpp>
 #include <mine/sdl/Window.hpp>
@@ -21,56 +22,6 @@
 using namespace mine;
 
 const std::string ASSET_DIR = "../assets";
-
-class MyVisitor : public sdl::EventVisitor
-{
-  public:
-    MyVisitor(ClipRenderer & renderer)
-      : m_renderer(renderer)
-    {}
-
-    bool shouldQuit() const
-    { return m_quit; }
-
-    void visit(const sdl::KeyEvent & ev) override
-    {
-      LOG_DEBUG("KeyEvent arrived: ", ev);
-      switch (ev.GetKeycode())
-      {
-        case SDLK_UP:
-          m_renderer.verticalMove(1.0);
-          break;
-        case SDLK_DOWN:
-          m_renderer.verticalMove(-1.0);
-          break;
-        case SDLK_LEFT:
-          m_renderer.horizontalMove(-1.0);
-          break;
-        case SDLK_RIGHT:
-          m_renderer.horizontalMove(1.0);
-          break;
-      }
-    }
-
-    void visit(const sdl::MouseEvent & ) override
-    {
-      LOG_DEBUG("MouseEvent arrived.");
-    }
-
-    void visit(const sdl::QuitEvent &) override
-    {
-      LOG_DEBUG("QuitEvent arrived.");
-      m_quit = true;
-    }
-
-    void visit(const sdl::WindowEvent &) override
-    {
-      LOG_DEBUG("WindowEvent arrived.");
-    }
-  private:
-    bool m_quit = false;
-    ClipRenderer & m_renderer;
-};
 
 int main()
 {
@@ -102,40 +53,44 @@ int main()
         sdl::Surface::CreateFromPNG(ASSET_DIR + "/soil.png"));
 
     FRect startClip = {
-      { -8.5,  -6}, // lower-left corner
+      { -8.5,  6}, // lower-left corner
       { 16, 12} };  // width, height
 
     ClipRenderer clip(startClip, renderer);
 
     BlockContainer blocks;
-    // Painter painter(blocks, clip, std::move(block));
+    Painter painter(blocks, clip, std::move(block));
 
     LOG_DEBUG("Painter and BlockContainer are initialized.");
 
-    blocks.createBlock(BlockType::Soil, 0, 0);
+    // TODO Perlin-noise generated world
+    for (int i = -20; i < 20; ++i)
+    {
+      blocks.createBlock(BlockType::Soil, i, 3);
+      blocks.createBlock(BlockType::Soil, i, 4);
+    }
 
     renderer.clear(); // clear the screen
     renderer.copyAll(background); // copy our background to renderer
-    // painter.drawBlocks();
-    clip.copy(block, FRect{{0,0}, {1,1}} );
+    painter.drawBlocks();
 
     renderer.present(); // show the result to the user
 
     sdl::EventWaitress waitress;
 
-    auto visitor = std::make_unique<MyVisitor>(clip);
-    MyVisitor & vis = *visitor;
+    auto visitor = std::make_unique<EventListener>(clip);
+    EventListener & vis = *visitor;
     waitress.addVisitor(std::move(visitor));
 
     while (!vis.shouldQuit())
     {
-      waitress.waitFor(10); // wait with 10ms timeout
-
       // Re-draw
       renderer.clear(); // clear the screen
       renderer.copyAll(background); // copy our background to renderer
-      clip.copy(block, FRect{{0,0}, {1,1}} );
+      painter.drawBlocks();
       renderer.present();
+
+      waitress.waitFor(10); // wait with 10ms timeout
     }
 
     LOG_DEBUG("========================================================================");
