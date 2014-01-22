@@ -9,3 +9,7 @@ MouseEvent::MouseEvent(SDL_MouseMotionEvent )
 QuitEvent::QuitEvent(SDL_QuitEvent )
 {
 }
+
+TimerEvent::TimerEvent()
+{
+}

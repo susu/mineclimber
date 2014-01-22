@@ -9,6 +9,7 @@ namespace mine
     class MouseEvent;
     class QuitEvent;
     class WindowEvent;
+    class TimerEvent;
 
     class EventVisitor
     {
@@ -17,6 +18,7 @@ namespace mine
         virtual void visit(const MouseEvent &) = 0;
         virtual void visit(const QuitEvent &) = 0;
         virtual void visit(const WindowEvent &) = 0;
+        virtual void visit(const TimerEvent &) = 0;
     };
   }
 }

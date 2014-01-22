@@ -45,6 +45,15 @@ namespace mine
         void toStream(std::ostream & out) const override
         {}
     };
+
+    class TimerEvent : public Event<TimerEvent>
+    {
+      public:
+        TimerEvent();
+
+        void toStream(std::ostream & out) const override
+        {}
+    };
   }
 }
 
